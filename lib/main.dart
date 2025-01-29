@@ -29,12 +29,25 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       title: dotenv.env['TITLE_APP'],
-      // theme: ThemeData(
-      //   colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      //   useMaterial3: true,
-      // ),
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark(),
+      theme: ThemeData(
+        brightness: Brightness.light, // Light theme
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.black87),
+          bodyMedium: TextStyle(color: Colors.black87),
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.dark(
+          primary: Colors.orange,
+          secondary: Colors.red,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
+        ),
+      ),
       themeMode: mainProvider.themeMode,
       initialRoute: "/",
       routes: {
@@ -46,10 +59,14 @@ class MyApp extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.contrast, color: Colors.white),
                     onPressed: () {
-                      if (mainProvider.themeMode == ThemeMode.light) {
-                        mainProvider.setThemMode(ThemeMode.dark);
-                      } else {
+                      Brightness themeBrightness = Theme.of(context).brightness;
+                      bool isSystemDarkMode =
+                          themeBrightness == Brightness.dark;
+
+                      if (isSystemDarkMode) {
                         mainProvider.setThemMode(ThemeMode.light);
+                      } else {
+                        mainProvider.setThemMode(ThemeMode.dark);
                       }
                     },
                   ),

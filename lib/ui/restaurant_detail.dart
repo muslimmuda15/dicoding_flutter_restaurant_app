@@ -20,9 +20,9 @@ class RestaurantDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final postProvider = Provider.of<RestaurantDetailProvider>(context);
+    final postProvider = Provider.of<RestaurantDetailProvider>(context);
 
-    if (provider.isLoading) {
+    if (postProvider.isLoading) {
       return Center(
         child: SizedBox(
           height: 100,
@@ -40,13 +40,13 @@ class RestaurantDetail extends StatelessWidget {
         ),
       );
     } else {
-      if (provider.baseResponse != null) {
-        if (provider.baseResponse!.error == true) {
+      if (postProvider.baseResponse != null) {
+        if (postProvider.baseResponse!.error == true) {
           return Center(
-            child: Text(provider.baseResponse?.message ?? "Error text"),
+            child: Text(postProvider.baseResponse?.message ?? "Error text"),
           );
         } else {
-          RestaurantData? restaurant = provider.baseResponse!.restaurant;
+          RestaurantData? restaurant = postProvider.baseResponse!.restaurant;
           if (restaurant != null) {
             return DefaultTabController(
               length: 2,
