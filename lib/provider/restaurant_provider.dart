@@ -1,23 +1,31 @@
 import 'package:dicoding_flutter_restaurant_app/model/base_response.dart';
+import 'package:dicoding_flutter_restaurant_app/model/restaurant_state.dart';
 import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantProvider extends ChangeNotifier {
   RestaurantAPI client = RestaurantAPI();
-  BaseResponse? _baseResponse;
-  bool _isLoading = false;
+  RestaurantState _state = RestaurantLoading();
 
-  BaseResponse? get baseResponse => _baseResponse;
-  bool get isLoading => _isLoading;
+  RestaurantState get state => _state;
 
   Future<void> fetchRestaurantList() async {
-    _isLoading = true;
-    // notifyListeners();
+    _state = RestaurantLoading(); // Set state to loading
+    notifyListeners();
 
-    final response = await client.getRestaurantList();
-    _baseResponse =
-        response.data != null ? BaseResponse.fromJson(response.data!) : null;
-    _isLoading = false;
+    try {
+      final response = await client.getRestaurantList();
+      if (response.data != null) {
+        _state = RestaurantSuccess(
+            BaseResponse.fromJson(response.data!)); // Set state to success
+      } else {
+        _state = RestaurantError("No data available"); // Set state to error
+      }
+    } catch (e) {
+      _state =
+          RestaurantError("Failed to fetch data: $e"); // Set state to error
+    }
+
     notifyListeners();
   }
 }

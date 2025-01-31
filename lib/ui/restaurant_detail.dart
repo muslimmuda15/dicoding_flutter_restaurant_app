@@ -3,6 +3,7 @@ import 'package:dicoding_flutter_restaurant_app/provider/main_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 
@@ -64,23 +65,27 @@ class RestaurantDetail extends StatelessWidget {
                         IconButton(
                           icon: Icon(Icons.contrast, color: Colors.white),
                           onPressed: () {
-                            if (mainProvider.themeMode == ThemeMode.light) {
-                              mainProvider.setThemMode(ThemeMode.dark);
-                            } else {
+                            Brightness themeBrightness =
+                                Theme.of(context).brightness;
+                            bool isSystemDarkMode =
+                                themeBrightness == Brightness.dark;
+
+                            if (isSystemDarkMode) {
                               mainProvider.setThemMode(ThemeMode.light);
+                            } else {
+                              mainProvider.setThemMode(ThemeMode.dark);
                             }
                           },
                         ),
                       ],
                       expandedHeight: MediaQuery.of(context).size.height - 72,
+                      title: Text(
+                        // This becomes the sticky title when collapsed
+                        restaurant.name ?? "",
+                        style: TextStyle(color: Colors.white),
+                      ),
                       flexibleSpace: FlexibleSpaceBar(
-                        title: Text(
-                          restaurant.name ?? "",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
+                        collapseMode: CollapseMode.pin,
                         background: Stack(
                           children: <Widget>[
                             Image.network(
@@ -89,21 +94,96 @@ class RestaurantDetail extends StatelessWidget {
                               width: double.infinity,
                               height: double.infinity,
                             ),
-                            Center(
-                              child: Container(
-                                height: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                  gradient: LinearGradient(
-                                    begin: FractionalOffset.topCenter,
-                                    end: FractionalOffset.bottomCenter,
-                                    colors: [
-                                      Colors.white.withValues(alpha: 0.0),
-                                      Colors.black.withValues(alpha: 0.7),
-                                    ],
-                                    stops: [0.0, 1.0],
-                                  ),
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.transparent,
+                                    Colors.black.withValues(alpha: 0.7),
+                                  ],
                                 ),
+                              ),
+                            ),
+                            Positioned(
+                              // Add title and description in the expanded area
+                              left: 16,
+                              bottom: 16,
+                              right: 16,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    restaurant.name ?? "",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    restaurant.description ?? "",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 3,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Row(
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Colors.white,
+                                        size: 16,
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text(
+                                        "${restaurant.address ?? ""}\n${restaurant.city ?? ""}",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 3,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(height: 8),
+                                  RatingStars(
+                                    value: restaurant.rating?.toDouble() ?? 0.0,
+                                    starBuilder: (index, color) => Icon(
+                                      Icons.star,
+                                      color: color,
+                                    ),
+                                    starCount: 5,
+                                    starSize: 20,
+                                    valueLabelColor: const Color(0xff9b9b9b),
+                                    valueLabelTextStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400,
+                                      fontStyle: FontStyle.normal,
+                                      fontSize: 12.0,
+                                    ),
+                                    valueLabelRadius: 10,
+                                    maxValue: 5,
+                                    starSpacing: 2,
+                                    maxValueVisibility: true,
+                                    valueLabelVisibility: true,
+                                    animationDuration:
+                                        Duration(milliseconds: 1000),
+                                    valueLabelPadding:
+                                        const EdgeInsets.symmetric(
+                                            vertical: 1, horizontal: 8),
+                                    valueLabelMargin:
+                                        const EdgeInsets.only(right: 8),
+                                    starOffColor: const Color(0xffe7e8ea),
+                                    starColor: Colors.yellow,
+                                  ),
+                                ],
                               ),
                             )
                           ],

@@ -3,23 +3,23 @@ import 'package:dicoding_flutter_restaurant_app/model/menus.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant_review.dart';
 
 class RestaurantData {
-  String? id, name, description, pictureId, city;
+  String? id, name, description, pictureId, city, address;
   num? rating;
   List<NameData>? categories;
   MenusData? menus;
   List<CustomerReview>? customerReviews;
 
   RestaurantData(
-    this.id,
-    this.name,
-    this.description,
-    this.pictureId,
-    this.city,
-    this.rating,
-    this.categories,
-    this.menus,
-    this.customerReviews,
-  );
+      this.id,
+      this.name,
+      this.description,
+      this.pictureId,
+      this.city,
+      this.rating,
+      this.categories,
+      this.menus,
+      this.customerReviews,
+      this.address);
 
   RestaurantData.fromJson(Map data) {
     id = data["id"];
@@ -27,6 +27,7 @@ class RestaurantData {
     description = data["description"];
     pictureId = data["pictureId"];
     city = data["city"];
+    address = data["address"];
     rating = data["rating"];
     categories = data["categories"] != null
         ? List<NameData>.from(

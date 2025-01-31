@@ -41,6 +41,8 @@ dependencies:
   loading_indicator: ^3.1.1
   logger: ^2.5.0
   google_fonts: ^6.2.1
+  test: ^1.25.8
+  flutter_rating_stars: ^1.1.0
 
 dev_dependencies:
   flutter_test:

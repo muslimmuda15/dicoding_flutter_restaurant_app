@@ -5,6 +5,7 @@ import 'package:dicoding_flutter_restaurant_app/ui/restaurant_detail.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -30,24 +31,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: dotenv.env['TITLE_APP'],
       theme: ThemeData(
-        brightness: Brightness.light, // Light theme
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.black87),
-          bodyMedium: TextStyle(color: Colors.black87),
-        ),
-      ),
+          brightness: Brightness.light, // Light theme
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+          // textTheme: const TextTheme(
+          //   bodyLarge: TextStyle(color: Colors.black87),
+          //   bodyMedium: TextStyle(color: Colors.black87),
+          // ),
+          textTheme: GoogleFonts.playfairTextTheme(
+            Theme.of(context).textTheme,
+          )),
       darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ColorScheme.dark(
-          primary: Colors.orange,
-          secondary: Colors.red,
-        ),
-        textTheme: const TextTheme(
-          bodyLarge: TextStyle(color: Colors.white),
-          bodyMedium: TextStyle(color: Colors.white),
-        ),
-      ),
+          brightness: Brightness.dark,
+          colorScheme: ColorScheme.dark(
+            primary: Colors.orange,
+            secondary: Colors.red,
+          ),
+          // textTheme: const TextTheme(
+          //   bodyLarge: TextStyle(color: Colors.white),
+          //   bodyMedium: TextStyle(color: Colors.white),
+          // ),
+          textTheme: GoogleFonts.playfairTextTheme(
+            Theme.of(context).textTheme,
+          )),
       themeMode: mainProvider.themeMode,
       initialRoute: "/",
       routes: {
