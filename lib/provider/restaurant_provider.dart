@@ -1,6 +1,8 @@
 import 'package:dicoding_flutter_restaurant_app/model/base_response.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant_state.dart';
 import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
+import 'package:dicoding_flutter_restaurant_app/util/logger.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantProvider extends ChangeNotifier {
@@ -10,20 +12,18 @@ class RestaurantProvider extends ChangeNotifier {
   RestaurantState get state => _state;
 
   Future<void> fetchRestaurantList() async {
-    _state = RestaurantLoading(); // Set state to loading
-    notifyListeners();
+    _state = RestaurantLoading();
 
     try {
       final response = await client.getRestaurantList();
       if (response.data != null) {
-        _state = RestaurantSuccess(
-            BaseResponse.fromJson(response.data!)); // Set state to success
+        _state = RestaurantSuccess(BaseResponse.fromJson(response.data!));
       } else {
-        _state = RestaurantError("No data available"); // Set state to error
+        _state = RestaurantError("No data available");
       }
-    } catch (e) {
-      _state =
-          RestaurantError("Failed to fetch data: $e"); // Set state to error
+    } on DioException catch (e) {
+      Log.d("Dio error : ", error: e);
+      _state = RestaurantError("Failed to fetch data : ${e.message}");
     }
 
     notifyListeners();

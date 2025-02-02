@@ -33,7 +33,7 @@ class RestaurantAPI {
     return response;
   }
 
-  Future<Response<Map>> getRestaurantDetail({required String id}) async {
+  Future<Response<Map>> getRestaurantDetail({required String? id}) async {
     Response<Map> response = await api.get("/detail/$id");
     return response;
   }

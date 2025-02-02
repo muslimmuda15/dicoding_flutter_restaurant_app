@@ -1,3 +1,4 @@
+import 'package:dicoding_flutter_restaurant_app/model/restaurant.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/main_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_provider.dart';
@@ -31,28 +32,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: dotenv.env['TITLE_APP'],
       theme: ThemeData(
-          brightness: Brightness.light, // Light theme
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
-          // textTheme: const TextTheme(
-          //   bodyLarge: TextStyle(color: Colors.black87),
-          //   bodyMedium: TextStyle(color: Colors.black87),
-          // ),
-          textTheme: GoogleFonts.playfairTextTheme(
-            Theme.of(context).textTheme,
-          )),
-      darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          colorScheme: ColorScheme.dark(
-            primary: Colors.orange,
-            secondary: Colors.red,
+        brightness: Brightness.light, // Light theme
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        textTheme: GoogleFonts.playfairTextTheme(
+          TextTheme(
+            bodyLarge: TextStyle(color: Colors.black87),
+            bodyMedium: TextStyle(color: Colors.black87),
           ),
-          // textTheme: const TextTheme(
-          //   bodyLarge: TextStyle(color: Colors.white),
-          //   bodyMedium: TextStyle(color: Colors.white),
-          // ),
-          textTheme: GoogleFonts.playfairTextTheme(
-            Theme.of(context).textTheme,
-          )),
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        colorScheme: ColorScheme.dark(
+          primary: Colors.orange,
+          secondary: Colors.red,
+        ),
+        textTheme: GoogleFonts.playfairTextTheme(
+          TextTheme(
+            bodyLarge: TextStyle(color: Colors.white),
+            bodyMedium: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
       themeMode: mainProvider.themeMode,
       initialRoute: "/",
       routes: {
@@ -79,11 +80,10 @@ class MyApp extends StatelessWidget {
               ),
               body: Restaurants(context),
             ),
-        "/detail": (context) => Scaffold(
-              body: RestaurantDetail(
-                context,
-                data: ModalRoute.of(context)?.settings.arguments as String,
-              ),
+        "/detail": (context) => RestaurantDetail(
+              context,
+              data:
+                  ModalRoute.of(context)?.settings.arguments as RestaurantClick,
             ),
       },
     );

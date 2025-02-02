@@ -24,7 +24,10 @@ class RestaurantItem extends StatelessWidget {
             Navigator.pushNamed(
               context,
               "/detail",
-              arguments: restaurantItem.id,
+              arguments: RestaurantClick(
+                restaurantItem.id,
+                restaurantItem.name,
+              ),
             );
           },
           child: Stack(

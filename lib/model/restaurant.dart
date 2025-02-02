@@ -2,6 +2,12 @@ import 'package:dicoding_flutter_restaurant_app/model/base_response.dart';
 import 'package:dicoding_flutter_restaurant_app/model/menus.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant_review.dart';
 
+class RestaurantClick {
+  String? id, name;
+
+  RestaurantClick(this.id, this.name);
+}
+
 class RestaurantData {
   String? id, name, description, pictureId, city, address;
   num? rating;
