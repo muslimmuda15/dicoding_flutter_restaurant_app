@@ -1,6 +1,8 @@
+import 'package:dicoding_flutter_restaurant_app/db/database.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant.dart';
 import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantItem extends StatelessWidget {
   final RestaurantData restaurantItem;
@@ -8,6 +10,8 @@ class RestaurantItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<DatabaseProvider>(context);
+
     return SizedBox(
       height: 200,
       child: Card(
@@ -98,15 +102,43 @@ class RestaurantItem extends StatelessWidget {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: ListTile(
-                          title: Text(
-                            restaurantItem.name ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Colors.white,
-                            ),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  restaurantItem.name ?? "",
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              FutureBuilder<bool>(
+                                future: database
+                                    .isRestaurantFavorite(restaurantItem.id!),
+                                builder: (context, snapshot) {
+                                  final isFavorite = snapshot.data ?? false;
+
+                                  return IconButton(
+                                      onPressed: () async {
+                                        await database
+                                            .toggleFavorite(restaurantItem);
+                                      },
+                                      icon: Icon(
+                                        isFavorite
+                                            ? Icons.favorite
+                                            : Icons.favorite_border_outlined,
+                                        color: isFavorite
+                                            ? Colors.red
+                                            : Colors.white,
+                                      ));
+                                },
+                              )
+                            ],
                           ),
                           subtitle: Text(
                             restaurantItem.description ?? "",

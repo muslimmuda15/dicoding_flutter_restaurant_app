@@ -1,8 +1,10 @@
+import 'package:dicoding_flutter_restaurant_app/db/database.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/main_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurant_detail.dart';
+import 'package:dicoding_flutter_restaurant_app/ui/restaurant_favorite.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -15,7 +17,8 @@ Future<void> main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => RestaurantProvider()),
       ChangeNotifierProvider(create: (_) => RestaurantDetailProvider()),
-      ChangeNotifierProvider(create: (_) => MainProvider())
+      ChangeNotifierProvider(create: (_) => MainProvider()),
+      ChangeNotifierProvider(create: (_) => DatabaseProvider())
     ],
     child: MyApp(),
   ));
@@ -54,7 +57,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      themeMode: mainProvider.themeMode,
+      themeMode: mainProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       initialRoute: "/",
       routes: {
         "/": (context) => Scaffold(
@@ -63,17 +66,18 @@ class MyApp extends StatelessWidget {
                 title: Text(dotenv.env['TITLE_APP']!),
                 actions: [
                   IconButton(
+                    icon: Icon(Icons.bookmark_outline, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pushNamed(
+                        context,
+                        "/favorite",
+                      );
+                    },
+                  ),
+                  IconButton(
                     icon: Icon(Icons.contrast, color: Colors.white),
                     onPressed: () {
-                      Brightness themeBrightness = Theme.of(context).brightness;
-                      bool isSystemDarkMode =
-                          themeBrightness == Brightness.dark;
-
-                      if (isSystemDarkMode) {
-                        mainProvider.setThemMode(ThemeMode.light);
-                      } else {
-                        mainProvider.setThemMode(ThemeMode.dark);
-                      }
+                      mainProvider.setThemMode();
                     },
                   ),
                 ],
@@ -84,6 +88,21 @@ class MyApp extends StatelessWidget {
               context,
               data:
                   ModalRoute.of(context)?.settings.arguments as RestaurantClick,
+            ),
+        "/favorite": (context) => Scaffold(
+              appBar: AppBar(
+                backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+                title: Text(dotenv.env['TITLE_APP']!),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.contrast, color: Colors.white),
+                    onPressed: () {
+                      mainProvider.setThemMode();
+                    },
+                  ),
+                ],
+              ),
+              body: RestaurantFavorite(),
             ),
       },
     );

@@ -1,3 +1,4 @@
+import 'package:dicoding_flutter_restaurant_app/db/database.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant_state.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/main_provider.dart';
@@ -31,15 +32,24 @@ class RestaurantDetail extends StatelessWidget {
             title: Text(data.name ?? ""),
             actions: [
               IconButton(
+                icon: Icon(Icons.bookmark_outline, color: Colors.white),
+                onPressed: () {
+                  Navigator.pushNamed(
+                    context,
+                    "/favorite",
+                  );
+                },
+              ),
+              IconButton(
                 icon: Icon(Icons.contrast, color: Colors.white),
                 onPressed: () {
                   Brightness themeBrightness = Theme.of(context).brightness;
                   bool isSystemDarkMode = themeBrightness == Brightness.dark;
 
                   if (isSystemDarkMode) {
-                    mainProvider.setThemMode(ThemeMode.light);
+                    mainProvider.setThemMode();
                   } else {
-                    mainProvider.setThemMode(ThemeMode.dark);
+                    mainProvider.setThemMode();
                   }
                 },
               ),
@@ -74,9 +84,9 @@ class RestaurantDetail extends StatelessWidget {
                   bool isSystemDarkMode = themeBrightness == Brightness.dark;
 
                   if (isSystemDarkMode) {
-                    mainProvider.setThemMode(ThemeMode.light);
+                    mainProvider.setThemMode();
                   } else {
-                    mainProvider.setThemMode(ThemeMode.dark);
+                    mainProvider.setThemMode();
                   }
                 },
               ),
@@ -93,6 +103,8 @@ class RestaurantDetail extends StatelessWidget {
   }
 
   Widget restaruantDetail(BuildContext context, RestaurantData? restaurant) {
+    final database = Provider.of<DatabaseProvider>(context);
+
     return DefaultTabController(
       length: 2,
       child: NestedScrollView(
@@ -112,9 +124,9 @@ class RestaurantDetail extends StatelessWidget {
                     bool isSystemDarkMode = themeBrightness == Brightness.dark;
 
                     if (isSystemDarkMode) {
-                      mainProvider.setThemMode(ThemeMode.light);
+                      mainProvider.setThemMode();
                     } else {
-                      mainProvider.setThemMode(ThemeMode.dark);
+                      mainProvider.setThemMode();
                     }
                   },
                 ),
@@ -194,32 +206,59 @@ class RestaurantDetail extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 8),
-                          RatingStars(
-                            value: restaurant?.rating?.toDouble() ?? 0.0,
-                            starBuilder: (index, color) => Icon(
-                              Icons.star,
-                              color: color,
-                            ),
-                            starCount: 5,
-                            starSize: 20,
-                            valueLabelColor: const Color(0xff9b9b9b),
-                            valueLabelTextStyle: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w400,
-                              fontStyle: FontStyle.normal,
-                              fontSize: 12.0,
-                            ),
-                            valueLabelRadius: 10,
-                            maxValue: 5,
-                            starSpacing: 2,
-                            maxValueVisibility: true,
-                            valueLabelVisibility: true,
-                            animationDuration: Duration(milliseconds: 1000),
-                            valueLabelPadding: const EdgeInsets.symmetric(
-                                vertical: 1, horizontal: 8),
-                            valueLabelMargin: const EdgeInsets.only(right: 8),
-                            starOffColor: const Color(0xffe7e8ea),
-                            starColor: Colors.yellow,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              RatingStars(
+                                value: restaurant?.rating?.toDouble() ?? 0.0,
+                                starBuilder: (index, color) => Icon(
+                                  Icons.star,
+                                  color: color,
+                                ),
+                                starCount: 5,
+                                starSize: 20,
+                                valueLabelColor: const Color(0xff9b9b9b),
+                                valueLabelTextStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontStyle: FontStyle.normal,
+                                  fontSize: 12.0,
+                                ),
+                                valueLabelRadius: 10,
+                                maxValue: 5,
+                                starSpacing: 2,
+                                maxValueVisibility: true,
+                                valueLabelVisibility: true,
+                                animationDuration: Duration(milliseconds: 1000),
+                                valueLabelPadding: const EdgeInsets.symmetric(
+                                    vertical: 1, horizontal: 8),
+                                valueLabelMargin:
+                                    const EdgeInsets.only(right: 8),
+                                starOffColor: const Color(0xffe7e8ea),
+                                starColor: Colors.yellow,
+                              ),
+                              FutureBuilder<bool>(
+                                future: database
+                                    .isRestaurantFavorite(restaurant!.id!),
+                                builder: (context, snapshot) {
+                                  final isFavorite = snapshot.data ?? false;
+
+                                  return IconButton(
+                                    onPressed: () async {
+                                      await database.toggleFavorite(restaurant);
+                                    },
+                                    icon: Icon(
+                                      isFavorite
+                                          ? Icons.favorite
+                                          : Icons.favorite_border_outlined,
+                                      color: isFavorite
+                                          ? Colors.red
+                                          : Colors.white,
+                                    ),
+                                  );
+                                },
+                              )
+                            ],
                           ),
                         ],
                       ),

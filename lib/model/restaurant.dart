@@ -51,4 +51,15 @@ class RestaurantData {
           )
         : null;
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name ?? "",
+      "description": description ?? "",
+      "pictureId": pictureId ?? "",
+      "city": city ?? "",
+      "rating": rating ?? 0,
+    };
+  }
 }

@@ -75,57 +75,5 @@ class Restaurants extends StatelessWidget {
           },
         )
     };
-    /*
-    if (postProvider.state == RestaurantLoading()) {
-      return Center(
-        child: SizedBox(
-          height: 100,
-          width: 100,
-          child: LoadingIndicator(
-            indicatorType: Indicator.ballScale,
-            colors: const [
-              Colors.red,
-              Colors.yellow,
-              Colors.green,
-              Colors.blue
-            ],
-            strokeWidth: 2,
-          ),
-        ),
-      );
-    } else {
-      if (postProvider.baseResponse != null) {
-        if (postProvider.baseResponse!.error == true) {
-          return Center(
-            child: Text(postProvider.baseResponse?.message ?? "Error text"),
-          );
-        } else {
-          return LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              if (constraints.maxWidth < 600) {
-                return AnimatedList(
-                    key: listKey,
-                    initialItemCount:
-                        postProvider.baseResponse!.restaurants?.length ?? 0,
-                    itemBuilder: buildRestaurantItem);
-              } else if (constraints.maxWidth < 900) {
-                return gridLayout(context, 2);
-              } else if (constraints.maxWidth < 1200) {
-                return gridLayout(context, 4);
-              } else if (constraints.maxWidth < 1350) {
-                return gridLayout(context, 5);
-              } else {
-                return gridLayout(context, 6);
-              }
-            },
-          );
-        }
-      } else {
-        return Center(
-          child: Text("No data found"),
-        );
-      }
-    }
-    */
   }
 }
