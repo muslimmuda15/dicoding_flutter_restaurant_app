@@ -1,7 +1,7 @@
 import 'package:dicoding_flutter_restaurant_app/db/database.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant_state.dart';
-import 'package:dicoding_flutter_restaurant_app/provider/main_provider.dart';
+import 'package:dicoding_flutter_restaurant_app/provider/setting_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +11,13 @@ import 'package:provider/provider.dart';
 
 class RestaurantDetail extends StatelessWidget {
   late final RestaurantDetailProvider provider;
-  late final MainProvider mainProvider;
+  late final SettingProvider settingProvider;
   final RestaurantClick data;
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
 
   RestaurantDetail(BuildContext context, {super.key, required this.data}) {
     provider = context.read<RestaurantDetailProvider>();
-    mainProvider = context.read<MainProvider>();
+    settingProvider = context.read<SettingProvider>();
     provider.fetchRestaurantDetail(data.id);
   }
 
@@ -47,9 +47,9 @@ class RestaurantDetail extends StatelessWidget {
                   bool isSystemDarkMode = themeBrightness == Brightness.dark;
 
                   if (isSystemDarkMode) {
-                    mainProvider.setThemMode();
+                    settingProvider.setThemMode();
                   } else {
-                    mainProvider.setThemMode();
+                    settingProvider.setThemMode();
                   }
                 },
               ),
@@ -84,9 +84,9 @@ class RestaurantDetail extends StatelessWidget {
                   bool isSystemDarkMode = themeBrightness == Brightness.dark;
 
                   if (isSystemDarkMode) {
-                    mainProvider.setThemMode();
+                    settingProvider.setThemMode();
                   } else {
-                    mainProvider.setThemMode();
+                    settingProvider.setThemMode();
                   }
                 },
               ),
@@ -124,9 +124,9 @@ class RestaurantDetail extends StatelessWidget {
                     bool isSystemDarkMode = themeBrightness == Brightness.dark;
 
                     if (isSystemDarkMode) {
-                      mainProvider.setThemMode();
+                      settingProvider.setThemMode();
                     } else {
-                      mainProvider.setThemMode();
+                      settingProvider.setThemMode();
                     }
                   },
                 ),

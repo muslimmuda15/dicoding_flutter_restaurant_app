@@ -1,5 +1,6 @@
 import 'package:dicoding_flutter_restaurant_app/model/base_response.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant_state.dart';
+import 'package:dicoding_flutter_restaurant_app/notification/local_notification_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurant_item.dart';
 import 'package:flutter/material.dart';
@@ -8,11 +9,16 @@ import 'package:provider/provider.dart';
 
 class Restaurants extends StatelessWidget {
   final GlobalKey<AnimatedListState> listKey = GlobalKey<AnimatedListState>();
+
+  late final LocalNotificationProvider localNotificationProvider;
   late final RestaurantProvider provider;
 
   Restaurants(BuildContext context, {super.key}) {
     provider = context.read<RestaurantProvider>();
+    localNotificationProvider = context.read<LocalNotificationProvider>();
+
     provider.fetchRestaurantList();
+    localNotificationProvider.requestPermissions();
   }
 
   Widget buildRestaurantItem(BuildContext context, int index,

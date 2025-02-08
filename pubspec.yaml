@@ -48,6 +48,8 @@ dependencies:
   path: ^1.9.0
   sqlite3_flutter_libs: ^0.5.29+1
   shared_preferences: ^2.5.1
+  flutter_local_notifications: ^18.0.1
+  timezone: ^0.10.0
 
 dev_dependencies:
   flutter_test:

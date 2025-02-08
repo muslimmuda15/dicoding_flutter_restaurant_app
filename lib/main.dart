@@ -1,6 +1,8 @@
 import 'package:dicoding_flutter_restaurant_app/db/database.dart';
 import 'package:dicoding_flutter_restaurant_app/model/restaurant.dart';
-import 'package:dicoding_flutter_restaurant_app/provider/main_provider.dart';
+import 'package:dicoding_flutter_restaurant_app/notification/local_notification_provider.dart';
+import 'package:dicoding_flutter_restaurant_app/notification/local_notification_service.dart';
+import 'package:dicoding_flutter_restaurant_app/provider/setting_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurant_detail.dart';
@@ -15,9 +17,15 @@ Future<void> main() async {
   await dotenv.load(fileName: ".env");
   runApp(MultiProvider(
     providers: [
+      Provider(create: (context) => LocalNotificationService()..init()),
+      ChangeNotifierProvider(
+        create: (context) => LocalNotificationProvider(
+          context.read<LocalNotificationService>(),
+        )..requestPermissions(),
+      ),
       ChangeNotifierProvider(create: (_) => RestaurantProvider()),
       ChangeNotifierProvider(create: (_) => RestaurantDetailProvider()),
-      ChangeNotifierProvider(create: (_) => MainProvider()),
+      ChangeNotifierProvider(create: (_) => SettingProvider()),
       ChangeNotifierProvider(create: (_) => DatabaseProvider())
     ],
     child: MyApp(),
@@ -30,7 +38,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final mainProvider = Provider.of<MainProvider>(context);
+    final settingProvider = Provider.of<SettingProvider>(context);
 
     return MaterialApp(
       title: dotenv.env['TITLE_APP'],
@@ -57,7 +65,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      themeMode: mainProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+      themeMode: settingProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       initialRoute: "/",
       routes: {
         "/": (context) => Scaffold(
@@ -77,7 +85,7 @@ class MyApp extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.contrast, color: Colors.white),
                     onPressed: () {
-                      mainProvider.setThemMode();
+                      settingProvider.setThemMode();
                     },
                   ),
                 ],
@@ -97,7 +105,7 @@ class MyApp extends StatelessWidget {
                   IconButton(
                     icon: Icon(Icons.contrast, color: Colors.white),
                     onPressed: () {
-                      mainProvider.setThemMode();
+                      settingProvider.setThemMode();
                     },
                   ),
                 ],

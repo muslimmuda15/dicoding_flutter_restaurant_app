@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class MainProvider extends ChangeNotifier {
+class SettingProvider extends ChangeNotifier {
   late bool _isDarkMode;
   bool get isDarkMode => _isDarkMode;
 
-  MainProvider() {
+  SettingProvider() {
     _isDarkMode = false;
     _loadTheme();
   }
