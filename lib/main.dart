@@ -8,16 +8,24 @@ import 'package:dicoding_flutter_restaurant_app/provider/restaurant_provider.dar
 import 'package:dicoding_flutter_restaurant_app/ui/restaurant_detail.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurant_favorite.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurants.dart';
+import 'package:dicoding_flutter_restaurant_app/ui/settings.dart';
+import 'package:dicoding_flutter_restaurant_app/util/time_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
   runApp(MultiProvider(
     providers: [
-      Provider(create: (context) => LocalNotificationService()..init()),
+      Provider(
+        create: (context) => LocalNotificationService()
+          ..init()
+          ..configureLocalTimeZone(),
+      ),
       ChangeNotifierProvider(
         create: (context) => LocalNotificationProvider(
           context.read<LocalNotificationService>(),
@@ -32,8 +40,15 @@ Future<void> main() async {
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // const _MyAppState({super.key});
 
   // This widget is the root of your application.
   @override
@@ -83,9 +98,12 @@ class MyApp extends StatelessWidget {
                     },
                   ),
                   IconButton(
-                    icon: Icon(Icons.contrast, color: Colors.white),
+                    icon: Icon(Icons.settings, color: Colors.white),
                     onPressed: () {
-                      settingProvider.setThemMode();
+                      Navigator.pushNamed(
+                        context,
+                        "/settings",
+                      );
                     },
                   ),
                 ],
@@ -112,6 +130,7 @@ class MyApp extends StatelessWidget {
               ),
               body: RestaurantFavorite(),
             ),
+        "/settings": (context) => Settings()
       },
     );
   }

@@ -4,10 +4,13 @@ import 'package:dicoding_flutter_restaurant_app/model/restaurant_state.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/setting_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/provider/restaurant_detail_provider.dart';
 import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
+import 'package:dicoding_flutter_restaurant_app/util/time_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_stars/flutter_rating_stars.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RestaurantDetail extends StatelessWidget {
   late final RestaurantDetailProvider provider;
@@ -41,16 +44,12 @@ class RestaurantDetail extends StatelessWidget {
                 },
               ),
               IconButton(
-                icon: Icon(Icons.contrast, color: Colors.white),
+                icon: Icon(Icons.settings, color: Colors.white),
                 onPressed: () {
-                  Brightness themeBrightness = Theme.of(context).brightness;
-                  bool isSystemDarkMode = themeBrightness == Brightness.dark;
-
-                  if (isSystemDarkMode) {
-                    settingProvider.setThemMode();
-                  } else {
-                    settingProvider.setThemMode();
-                  }
+                  Navigator.pushNamed(
+                    context,
+                    "/settings",
+                  );
                 },
               ),
             ],

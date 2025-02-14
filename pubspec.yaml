@@ -50,6 +50,9 @@ dependencies:
   shared_preferences: ^2.5.1
   flutter_local_notifications: ^18.0.1
   timezone: ^0.10.0
+  flutter_timezone: ^4.1.0
+  time_picker_spinner: ^1.0.2
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:
