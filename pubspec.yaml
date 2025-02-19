@@ -53,6 +53,8 @@ dependencies:
   flutter_timezone: ^4.1.0
   time_picker_spinner: ^1.0.2
   fluttertoast: ^8.2.12
+  mockito: ^5.4.5
+  build_runner: ^2.4.15
 
 dev_dependencies:
   flutter_test:

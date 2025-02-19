@@ -9,13 +9,10 @@ import 'package:dicoding_flutter_restaurant_app/ui/restaurant_detail.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurant_favorite.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/restaurants.dart';
 import 'package:dicoding_flutter_restaurant_app/ui/settings.dart';
-import 'package:dicoding_flutter_restaurant_app/util/time_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
@@ -40,17 +37,9 @@ Future<void> main() async {
   ));
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  // const _MyAppState({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);

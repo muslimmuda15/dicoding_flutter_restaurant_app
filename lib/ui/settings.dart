@@ -4,6 +4,7 @@ import 'package:dicoding_flutter_restaurant_app/util/time_converter.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class Settings extends StatelessWidget {
   const Settings({super.key});
@@ -120,10 +121,6 @@ class Settings extends StatelessWidget {
                                       fontWeight: FontWeight.w300,
                                     ),
                                   ),
-                                  Text(
-                                    "Waktunya makan siang",
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
                                 ],
                               )
                             ],
@@ -143,8 +140,18 @@ class Settings extends StatelessWidget {
 
                             settingProvider.setTime(intToTimeOfDay(time));
                             notifProvider.scheduleDailyNotification(0);
+                            Fluttertoast.showToast(
+                              msg: "Alarm set ON",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
                           } else {
                             notifProvider.cancelNotification(0);
+                            Fluttertoast.showToast(
+                              msg: "Alarm set OFF",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                            );
                           }
                         },
                       ),
