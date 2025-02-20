@@ -18,7 +18,6 @@ class Restaurants extends StatelessWidget {
     localNotificationProvider = context.read<LocalNotificationProvider>();
 
     provider.fetchRestaurantList();
-    localNotificationProvider.requestPermissions();
   }
 
   Widget buildRestaurantItem(BuildContext context, int index,
@@ -57,8 +56,29 @@ class Restaurants extends StatelessWidget {
             ),
           ),
         ),
-      RestaurantError(:final message) => Center(
-          child: Text(message),
+      RestaurantError() => LayoutBuilder(
+          builder: (context, constraints) {
+            return Center(
+              child: SizedBox(
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
+                child: Image(
+                  image: AssetImage("assets/images/no_internet.png"),
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: Colors.grey[300],
+                      child: Icon(
+                        Icons.image_not_supported,
+                        size: 50,
+                        color: Colors.grey[600],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            );
+          },
         ),
       RestaurantSuccess(:final baseResponse) => LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

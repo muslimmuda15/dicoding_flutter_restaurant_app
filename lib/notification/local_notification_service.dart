@@ -1,4 +1,5 @@
 import 'package:dicoding_flutter_restaurant_app/provider/setting_provider.dart';
+import 'package:dicoding_flutter_restaurant_app/service/restaurant_api.dart';
 import 'package:dicoding_flutter_restaurant_app/util/logger.dart';
 import 'package:dicoding_flutter_restaurant_app/util/time_converter.dart';
 import 'package:flutter/foundation.dart';
@@ -80,6 +81,9 @@ class LocalNotificationService {
     String channelId = "3",
     String channelName = "Schedule Notification",
   }) async {
+    RestaurantAPI client = RestaurantAPI();
+    final restaurant = await client.getRandomRestaurant();
+
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       channelId,
       channelName,
@@ -98,8 +102,10 @@ class LocalNotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      'Daily scheduled notification title',
-      'This is a body of daily scheduled notification',
+      'Daily schedule lunch time',
+      restaurant != null
+          ? "Coba makan di ${restaurant.name}"
+          : 'Don\'t forget to eat',
       datetimeSchedule,
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -117,9 +123,9 @@ class LocalNotificationService {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
     tz.TZDateTime scheduledDate =
         tz.TZDateTime(tz.local, now.year, now.month, now.day, t.hour, t.minute);
-    // if (scheduledDate.isBefore(now)) {
-    //   scheduledDate = scheduledDate.add(const Duration(days: 1));
-    // }
+    if (scheduledDate.isBefore(now)) {
+      scheduledDate = scheduledDate.add(const Duration(days: 1));
+    }
 
     Log.d(
         "Time scheduled : ${scheduledDate.year}-${scheduledDate.month}-${scheduledDate.day} ${scheduledDate.hour}:${scheduledDate.minute}");
@@ -133,14 +139,6 @@ class LocalNotificationService {
             ?.areNotificationsEnabled() ??
         false;
   }
-
-  // Future<bool> _requestAndroidNotificationsPermission() async {
-  //   return await flutterLocalNotificationsPlugin
-  //           .resolvePlatformSpecificImplementation<
-  //               AndroidFlutterLocalNotificationsPlugin>()
-  //           ?.requestNotificationsPermission() ??
-  //       false;
-  // }
 
   Future<void> showNotification({
     required int id,

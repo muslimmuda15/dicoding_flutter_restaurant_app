@@ -68,7 +68,7 @@ class RestaurantDetail extends StatelessWidget {
             ),
           ),
         ),
-      RestaurantError(:final message) => Scaffold(
+      RestaurantError() => Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
             title: Text(data.name ?? ""),
@@ -88,8 +88,29 @@ class RestaurantDetail extends StatelessWidget {
               ),
             ],
           ),
-          body: Center(
-            child: Text(message),
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return Center(
+                child: SizedBox(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  child: Image(
+                    image: AssetImage("assets/images/no_internet.png"),
+                    fit: BoxFit.contain, // This maintains aspect ratio
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        color: Colors.grey[300],
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 50,
+                          color: Colors.grey[600],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
           ),
         ),
       RestaurantSuccess(:final baseResponse) => Scaffold(
@@ -142,6 +163,38 @@ class RestaurantDetail extends StatelessWidget {
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: double.infinity,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) return child;
+                        return Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        );
+                      },
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          "assets/images/no_image.png",
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                          // In case the asset image also fails to load
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              width: double.infinity,
+                              height: double.infinity,
+                              color: Colors.grey[300],
+                              child: Icon(
+                                Icons.image_not_supported,
+                                size: 50,
+                                color: Colors.grey[600],
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
                     Container(
                       decoration: BoxDecoration(
